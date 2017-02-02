@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% from "bootstrap/pagination.html" import render_pagination %}
+{% block page_content %}
+{{ render_pagination(items_pagination) }}
+{% endblock %}

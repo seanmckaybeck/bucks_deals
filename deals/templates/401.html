@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Unauthorized{% endblock %}
+{% block pagecontent %}
+<h1>Unauthorized</h1>
+<p>You are not auhtorized to view this.
+<p><a href="{{ url_for('deals.index') }}">Go home</a>
+{% endblock %}

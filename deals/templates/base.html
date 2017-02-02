@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/utils.html" as utils %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    {% endblock %}
+    {% block scripts %}
+    {{ super() }}
+    {% endblock %}
+    <title>{% block title %}Bucks Deals{% endblock %}</title>
+    {% set active_page = active_page|default('index') -%}
+    {% set navigation_bar = [
+        (url_for('deals.index'), 'index', 'Home'),
+        (url_for('deals.items'), 'items', 'Items'),
+        (url_for('deals.submit'), 'submit', 'Submit'),
+        (url_for('deals.about'), 'about', 'About'),
+        (url_for('deals.contact'), 'contact', 'Contact')
+      ]
+    %}
+    {% block navbar %}
+    <div class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Bucks</a><!-- TODO maybe add a picture? -->
+            </div>
+            <ul id="navigation" class="nav navbar-nav">
+            {% for href, id, caption in navigation_bar %}
+                <li {% if id == active_page %}class="active"{% endif %}><a href="{{ href|e }}">{{ caption|e }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endblock %}
+</head>
+<body>
+{% block content %}
+<div class="container">
+{{ utils.flashed_messages(dismissible=true) }}
+{% block page_content %}
+{% endblock %}
+</div>
+{% endblock %}
+</body>
+<foot>
+Copyright 2017 Sean Beck
+</foot>
+</html>

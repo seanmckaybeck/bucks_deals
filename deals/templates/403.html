@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Forbidden{% endblock %}
+{% block page_content %}
+<h1>Forbidden</h1>
+<p>You shall not pass.
+<p><a href="{{ url_for('deals.index') }}">Go home</a>
+{% endblock %}

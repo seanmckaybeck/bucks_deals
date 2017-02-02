@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% set active_page="submit" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block page_content %}
+{{ wtf.quick_form(form) }}
+{% endblock %}
