@@ -6,11 +6,11 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
-from mailgun import mailgun_notify
+from .mailgun import mailgun_notify
 
 from . import db
 from .forms import ItemForm
-from .models import UnapprovedItem, Item
+from .models import UnapprovedItem, Item, Spot
 
 
 deals_blueprint = Blueprint('deals', __name__)
@@ -20,8 +20,9 @@ from . import errors
 @deals_blueprint.route('/')
 @deals_blueprint.route('/<int:page>')
 def index(page=1):
+    spots = Spot.query.all()
     items = Item.query.order_by(Item.metal.desc()).paginate(page, current_app.config['PAGINATION'], True)
-    return render_template('index.html', items_pagination=items)
+    return render_template('index.html', items_pagination=items, spots=spots)
 
 
 @deals_blueprint.route('/about')
@@ -37,8 +38,8 @@ def contact():
 @deals_blueprint.route('/items/')
 @deals_blueprint.route('/items/<int:page>')
 def items(page=1):
-    items = Item.query.paginate(page, current_app.config['PAGINATION'], True).items
-    return render_template('items.html', items=items)
+    pagination = Item.query.paginate(page, current_app.config['PAGINATION'], True)
+    return render_template('items.html', pagination=pagination)
 
 
 @deals_blueprint.route('/item/<int:item_id>', methods=['GET', 'POST'])
@@ -46,6 +47,7 @@ def item(item_id):
     i = Item.query.get(item_id)
     if i is None:
         abort(404)
+    spot = Spot.query.filter_by(name=i.metal).first()
     if request.method == 'POST':
         if i.reported:
             flash('This item has already been reported', 'warning')
@@ -55,7 +57,7 @@ def item(item_id):
             db.session.add(i)
             db.session.commit()
             flash('Thanks for the report! We\'ll look into it', 'success')
-    return render_template('item.html', item=i)
+    return render_template('item.html', item=i, spot=spot)
 
 
 @deals_blueprint.route('/submit', methods=['GET', 'POST'])

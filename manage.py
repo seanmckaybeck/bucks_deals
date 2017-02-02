@@ -4,7 +4,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 
 from deals import create_app, db
-from deals.models import Item
+from deals.models import Item, Spot
 
 
 path = os.path.abspath(os.path.dirname(__file__))
@@ -44,6 +44,17 @@ def delete(ebay_id):
     if item is not None:
         db.session.delete(item)
         db.session.commit()
+
+
+@manager.command
+def spot(name, value):
+    spot = Spot.query.filter_by(name=name).first()
+    if spot is None:
+        spot = Spot(name, value)
+    else:
+        spot.value = value
+    db.session.add(spot)
+    db.session.commit()
 
 
 if __name__ == '__main__':

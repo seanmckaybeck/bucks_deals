@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% set active_page = "about" %}
+{% block page_content %}
+<p>This website is a service for determining how to best spend your money during eBay Bucks promotions, or on eBay in general, on precious metals.
+<p>An overview on eBay bucks can be found <a href="http://pages.ebay.com/help/buy/ebay-bucks.html">here</a>, but the gist of it is you get eBay credit from buying qualifying products.
+You can earn up to $100 on a single purchase and up to $500 during a 3 month time period. 
+The base earning percentage is 1%, but during promotions you can get up to 10% per purchase.
+For metals, only items listed under Coins qualify.
+If it is listed under Bullion then it does not qualify.
+To ensure you receive the promotional offers, make sure your account settings have email promotions enabled.
+<p>The items listed on this site qualify for eBay bucks as of the time of their submission.
+If you find that an item is no longer elligible, visit the item's page here and click the report button.
+If you find a new item that qualifies, you can visit the <a href="{{ url_for('deals.submit') }}">submission page</a> and request that it be added.
+<p>Generally, gold items are your best choice during promotions.
+While there are silver options, they don't pay out as well.
+<p>I hope the site is useful to you, and if you find any issues, do not hesitate to <a href="{{ url_for('deals.contact') }}">report them</a>.
+{% endblock %}

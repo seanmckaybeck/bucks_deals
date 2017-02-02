@@ -5,8 +5,8 @@
 <table class="table table-hover table-condensed table-responsive">
     <tr><td><b>Name: </b></td><td>{{ item.name }}</td></tr>
     <tr><td><b>Item Number: </b></td><td><a href="https://www.ebay.com/itm/{{ item.ebay_id }}">{{ item.ebay_id }}</a></td></tr>
-    <tr><td><b>Metal Type: </b></td><td>{{ item.metal }}</td></tr>
-    <tr><td><b>Price (USD): </b></td><td>{{ item.price }}</td></tr>
+    <tr><td><b>Metal Type: </b></td><td>{{ item.metal|capitalize }}</td></tr>
+    <tr><td><b>Price (USD): </b></td><td>${{ item.price }}</td></tr>
     <tr><td><b>Weight (ozt): </b></td><td>{{ item.weight }}</td></tr>
 </table>
 <br>

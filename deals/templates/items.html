@@ -1,9 +1,15 @@
 {% extends "base.html" %}
+{% from "bootstrap/pagination.html" import render_pagination %}
 {% set active_page = "items" %}
 {% block page_content %}
 <table class="table table-hover table-condensed table-responsive">
-{% for item in items %}
-    <tr><td><a href="{{ url_for('deals.item', item_id=item.id) }}">{{ item.name }}</a></td><td><a href="https://www.ebay.com/itm/{{ item.ebay_id }}">{{ item.ebay_id }}</a></td></tr>
+{% for item in pagination.items %}
+    <tr>
+      <td><a href="{{ url_for('deals.item', item_id=item.id) }}">{{ item.name }}</a></td>
+      <td><a href="https://www.ebay.com/itm/{{ item.ebay_id }}">{{ item.ebay_id }}</a></td>
+      <td>{{ item.weight }} ozt</td>
+    </tr>
 {% endfor %}
 </table>
+{{ render_pagination(pagination) }}
 {% endblock %}

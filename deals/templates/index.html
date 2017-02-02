@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 {% from "bootstrap/pagination.html" import render_pagination %}
 {% block page_content %}
+{% for spot in spots %}
+<b>{{ spot.name|capitalize }}:</b> ${{ spot.value }}<br>
+{% endfor %}
 <table class="table table-hover table-condensed table-responsive">
+    <!-- TODO add header -->
     {% for item in items_pagination.items %}
     <tr>
         <td><a href="{{ url_for('deals.item', item_id=item.id) }}">{{ item.name }}</a></td>
