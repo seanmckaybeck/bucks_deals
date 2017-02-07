@@ -9,7 +9,7 @@ from flask import url_for
 from .mailgun import mailgun_notify
 
 from . import db
-from .forms import ItemForm
+from .forms import ItemForm, PercentForm
 from .models import UnapprovedItem, Item, Spot
 
 
@@ -20,9 +20,10 @@ from . import errors
 @deals_blueprint.route('/')
 @deals_blueprint.route('/<int:page>')
 def index(page=1):
+    select = PercentForm()
     spots = Spot.query.all()
     items = Item.query.order_by(Item.metal.desc()).paginate(page, current_app.config['PAGINATION'], True)
-    return render_template('index.html', items_pagination=items, spots=spots)
+    return render_template('index.html', items_pagination=items, spots=spots, select=select)
 
 
 @deals_blueprint.route('/about')
