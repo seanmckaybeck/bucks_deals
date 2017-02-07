@@ -36,13 +36,6 @@ def contact():
     return render_template('contact.html')
 
 
-@deals_blueprint.route('/items/')
-@deals_blueprint.route('/items/<int:page>')
-def items(page=1):
-    pagination = Item.query.paginate(page, current_app.config['PAGINATION'], True)
-    return render_template('items.html', pagination=pagination)
-
-
 @deals_blueprint.route('/item/<int:item_id>', methods=['GET', 'POST'])
 def item(item_id):
     i = Item.query.get(item_id)

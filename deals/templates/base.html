@@ -15,7 +15,6 @@
     {% set active_page = active_page|default('index') -%}
     {% set navigation_bar = [
         (url_for('deals.index'), 'index', 'Home'),
-        (url_for('deals.items'), 'items', 'Items'),
         (url_for('deals.submit'), 'submit', 'Submit'),
         (url_for('deals.about'), 'about', 'About'),
         (url_for('deals.contact'), 'contact', 'Contact')
