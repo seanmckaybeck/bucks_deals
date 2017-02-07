@@ -41,10 +41,13 @@
 {{ utils.flashed_messages(dismissible=true) }}
 {% block page_content %}
 {% endblock %}
+{% include 'ad.html' %}
 </div>
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted">Copyright 2017 Sean Beck
+    </div>
+</footer>
 {% endblock %}
 </body>
-<foot>
-Copyright 2017 Sean Beck
-</foot>
 </html>

@@ -11,5 +11,7 @@ PAGINATION = 15
 DEBUG = True
 SQLALCHEMY_DATABASE_URI = 'sqlite:///'+os.path.join(path, 'data.db')
 MAILGUN_API_KEY = ''
-MAILGUN_DOMAIN = ''
+MAILGUN_DOMAIN = 'sandbox4eaa7c2777d8425488180004f1cfaac4.mailgun.org'
+MAILGUN_ADMIN = 'seanmckaybeck@gmail.com'
+MAILGUN_FROM = 'Mailgun <mailgun@{}>'.format(MAILGUN_DOMAIN)
 
