@@ -46,7 +46,15 @@ def item(item_id):
         if i.reported:
             flash('This item has already been reported', 'warning')
         else:
-            # TODO send report email
+            mailgun_params = {
+                              'api_key': current_app.config['MAILGUN_API_KEY'],
+                              'domain': current_app.config['MAILGUN_DOMAIN'],
+                              'subject': 'Item reported',
+                              'to': current_app.config['MAILGUN_ADMIN'],
+                              'from': current_app.config['MAILGUN_FROM'],
+                              'text': 'A user has reported item {}'.format(item_id)
+                             }
+            mailgun_notify(**mailgun_params)
             i.reported = True
             db.session.add(i)
             db.session.commit()
