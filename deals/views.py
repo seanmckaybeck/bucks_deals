@@ -19,12 +19,11 @@ from . import errors
 
 
 @deals_blueprint.route('/')
-@deals_blueprint.route('/<int:page>')
 def index(page=1):
     select = PercentForm()
     spots = Spot.query.all()
-    items = Item.query.order_by(Item.metal.desc()).paginate(page, current_app.config['PAGINATION'], True)
-    return render_template('index.html', items_pagination=items, spots=spots, select=select)
+    items = Item.query.all()
+    return render_template('index.html', items=items, spots=spots, select=select)
 
 
 @deals_blueprint.route('/about')
