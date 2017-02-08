@@ -80,7 +80,11 @@ def submit():
     return render_template('submit.html', form=form)
 
 
+class ItemView(ModelView):
+    form_excluded_columns = ('picture',)
+
+
 admin.add_view(ModelView(UnapprovedItem, db.session))
-admin.add_view(ModelView(Item, db.session))
+admin.add_view(ItemView(Item, db.session))
 admin.add_view(ModelView(Spot, db.session))
 
