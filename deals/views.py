@@ -6,9 +6,10 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask_admin.contrib.sqla import ModelView
 from .mailgun import mailgun_notify
 
-from . import db
+from . import db, admin
 from .forms import ItemForm, PercentForm
 from .models import UnapprovedItem, Item, Spot
 
@@ -77,4 +78,9 @@ def submit():
         else:
             flash('That item has already been submitted.', 'warning')
     return render_template('submit.html', form=form)
+
+
+admin.add_view(ModelView(UnapprovedItem, db.session))
+admin.add_view(ModelView(Item, db.session))
+admin.add_view(ModelView(Spot, db.session))
 

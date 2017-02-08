@@ -1,7 +1,9 @@
 import os
 
+from ebaysdk.shopping import Connection
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
+import requests
 
 from deals import create_app, db
 from deals.models import Item, Spot
@@ -54,6 +56,32 @@ def spot(name, value):
     else:
         spot.value = value
     db.session.add(spot)
+    db.session.commit()
+
+
+@manager.command
+def update_spot():
+    spots = Spot.query.all()
+    r = requests.get('http://spot.seanmckaybeck.com/api/all')
+    r.raise_for_status()
+    for metal in spots:
+        spot = Spot.query.filter_by(name=metal.name).first()
+        spot.value = r.json()[metal.name]
+        db.session.add(spot)
+        db.session.commit()
+
+
+@manager.command
+def update_items():
+    items = Item.query.all()
+    api = Connection(appid=app.config['EBAY_APP_ID'], config_file=None)
+    for item in items:
+        try:
+            r = api.execute('GetSingleItem', {'ItemID': str(item.ebay_id)})
+        except:
+            print('call failed for {}'.format(item.ebay_id))
+        item.price = float(r.dict()['Item']['ConvertedCurrentPrice']['value'])
+        db.session.add(item)
     db.session.commit()
 
 
