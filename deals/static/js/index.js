@@ -19,4 +19,6 @@ function percentage_changed() {
             kids[9].setAttribute('bgcolor', 'limegreen');
         kids[10].textContent = (kids[6].textContent / kids[3].textContent).toFixed(2); // bucks/ozt: bucks / weight
     });
+    var table = $('item-table');
+    sorttable.makeSortable(table);
 }

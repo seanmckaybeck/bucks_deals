@@ -4,14 +4,9 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 
 
-class MyAdminIndexView(AdminIndexView):
-    def is_accessible(self):
-        return current_app.config['ADMIN']
-
-
 db = SQLAlchemy()
 bootstrap = Bootstrap()
-admin = Admin(template_mode='bootstrap3', index_view=MyAdminIndexView())
+admin = Admin(template_mode='bootstrap3')
 
 
 def create_app(config):

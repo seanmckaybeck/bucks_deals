@@ -5,8 +5,10 @@ from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import request
+from flask import Response
 from flask import url_for
 from flask_admin.contrib.sqla import ModelView
+from werkzeug.exceptions import HTTPException
 from .mailgun import mailgun_notify
 
 from . import db, admin
@@ -79,11 +81,19 @@ def submit():
     return render_template('submit.html', form=form)
 
 
-class ItemView(ModelView):
+class HiddenView(ModelView):
+    def is_accessible(self):
+        auth = request.authorization or request.environ.get('REMOTE_USER')
+        if not auth or (auth.username, auth.password) != current_app.config['ADMIN_CREDS']:
+            raise HTTPException('', Response('Please log in', 401, {'WWW-Authenticate': 'Basic realm="Login required"'}))
+        return True
+
+
+class ItemView(HiddenView):
     form_excluded_columns = ('picture',)
 
 
-admin.add_view(ModelView(UnapprovedItem, db.session))
+admin.add_view(HiddenView(UnapprovedItem, db.session))
 admin.add_view(ItemView(Item, db.session))
-admin.add_view(ModelView(Spot, db.session))
+admin.add_view(HiddenView(Spot, db.session))
 
