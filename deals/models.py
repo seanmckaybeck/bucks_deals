@@ -22,13 +22,14 @@ class Item(db.Model):
     picture = db.Column(db.LargeBinary)
     reported = db.Column(db.Boolean, default=False)
 
-    def __init__(self, ebay_id, name, price, weight, metal, picture=None):
+    def __init__(self, ebay_id=0, name='', price=0, weight=0, metal='', reported=False, picture=None):
         self.ebay_id = ebay_id
         self.name = name
         self.price = price
         self.weight = weight
         self.metal = metal
         self.picture = picture
+        self.reported = reported
 
     def __repr__(self):
         return 'Item(%d, %s, %f, %f, %s, ...)' % (self.ebay_id, self.name, self.price, self.weight, self.metal)
