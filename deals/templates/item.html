@@ -8,7 +8,7 @@
     <tr><td><b>Metal Type: </b></td><td>{{ item.metal|capitalize }}</td></tr>
     <tr><td><b>Price (USD): </b></td><td>${{ item.price }}</td></tr>
     <tr><td><b>Weight (ozt): </b></td><td>{{ item.weight }}</td></tr>
-    <tr><td><b>Available: </b></td><td><span class="glyphicon {% if item.available %}glyphicon-ok-circle{% else %}glyphicon-remove-circle{% endif %}" aria-hidden="true"></span></td></tr>
+    <tr><td><b>Available: </b></td><td><span class="glyphicon {% if item.available %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></td></tr>
     <tr><td><b>Quantity Remaining: </b></td><td>{{ item.quantity }}</td></tr>
 </table>
 <br>
