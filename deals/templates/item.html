@@ -1,16 +1,18 @@
 {% extends "base.html" %}
 {% set active_page="items" %}
 {% block page_content %}
-<!-- something with the picture -->
+{% if item.picture_url %}<img src="{{ item.picture_url }}" height=200 width=200></img>{% endif %}
 <table class="table table-hover table-condensed table-responsive">
     <tr><td><b>Name: </b></td><td>{{ item.name }}</td></tr>
     <tr><td><b>Item Number: </b></td><td><a href="https://www.ebay.com/itm/{{ item.ebay_id }}">{{ item.ebay_id }}</a></td></tr>
     <tr><td><b>Metal Type: </b></td><td>{{ item.metal|capitalize }}</td></tr>
     <tr><td><b>Price (USD): </b></td><td>${{ item.price }}</td></tr>
     <tr><td><b>Weight (ozt): </b></td><td>{{ item.weight }}</td></tr>
+    <tr><td><b>Available: </b></td><td><span class="glyphicon {% if item.available %}glyphicon-ok-circle{% else %}glyphicon-remove-circle{% endif %}" aria-hidden="true"></span></td></tr>
+    <tr><td><b>Quantity Remaining: </b></td><td>{{ item.quantity }}</td></tr>
 </table>
 <br>
 <form action="" method="POST" class="form" role="form">
-    <input type="submit" class="btn btn-default" name="submit" value="Report as inelligible" id="submit"></input>
+    <input type="submit" class="btn btn-default" name="submit" value="Report as inelligible for bucks" id="submit"></input>
 </form>
 {% endblock %}

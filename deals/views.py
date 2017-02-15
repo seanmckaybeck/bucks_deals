@@ -73,8 +73,16 @@ def submit():
             u = UnapprovedItem(form.item.data)
             db.session.add(u)
             db.session.commit()
-            # maybe add sending an email to admin here
             flash('Item submitted for approval. Thank you.', 'success')
+            mailgun_params = {
+                              'api_key': current_app.config['MAILGUN_API_KEY'],
+                              'domain': current_app.config['MAILGUN_DOMAIN'],
+                              'subject': 'Item submitted',
+                              'to': current_app.config['MAILGUN_ADMIN'],
+                              'from': current_app.config['MAILGUN_FROM'],
+                              'text': 'A user has submitted an item: http://ebay.com/itm/{}'.format(form.item.data)
+                             }
+            mailgun_notify(**mailgun_params)
             return redirect(url_for('deals.index'))
         else:
             flash('That item has already been submitted.', 'warning')

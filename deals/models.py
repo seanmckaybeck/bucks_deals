@@ -19,17 +19,21 @@ class Item(db.Model):
     price = db.Column(db.Float)
     weight = db.Column(db.Float)
     metal = db.Column(db.String)
-    picture = db.Column(db.LargeBinary)
+    picture_url = db.Column(db.String)
     reported = db.Column(db.Boolean, default=False)
+    available = db.Column(db.Boolean, default=True)
+    quantity = db.Column(db.Integer, default=0)
 
-    def __init__(self, ebay_id=0, name='', price=0, weight=0, metal='', reported=False, picture=None):
+    def __init__(self, ebay_id=0, name='', price=0, weight=0, metal='', reported=False, available=True, picture_url='', quantity=0):
         self.ebay_id = ebay_id
         self.name = name
         self.price = price
         self.weight = weight
         self.metal = metal
-        self.picture = picture
+        self.picture_url = picture_url
         self.reported = reported
+        self.available = available
+        self.quantity = quantity
 
     def __repr__(self):
         return 'Item(%d, %s, %f, %f, %s, ...)' % (self.ebay_id, self.name, self.price, self.weight, self.metal)
