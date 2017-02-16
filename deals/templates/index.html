@@ -19,7 +19,12 @@ sorttable.makeSortable(table);
 {% for spot in spots %}
 <b>{{ spot.name|capitalize }}:</b> ${{ spot.value }}<br>
 {% endfor %}
-{{ select.percentage.label }}<br>{{ select.percentage(onchange='percentage_changed()', class='form-control') }}<br><br>
+<div class="form-group">
+{{ select.percentage.label }}{{ select.percentage(onchange='percentage_changed()', class='form-control') }}
+</div>
+<div class="form-group">
+{{ select.cashback.label }}{{ select.cashback(onchange='percentage_changed()', class='form-control') }}
+</div>
 <table class="table table-hover table-bordered table-responsive sortable" id="item-table">
     <thead>
     <tr>
@@ -32,7 +37,7 @@ sorttable.makeSortable(table);
         <th class="sorttable_numeric">Bucks</th>
         <th class="sorttable_numeric">Diff from melt w/ bucks</th>
         <th class="sorttable_numeric">% diff from melt w/ bucks</th>
-        <th class="sorttable_numeric">2% cash back</th>
+        <th class="sorttable_numeric">% cash back</th>
         <th class="sorttable_numeric">Diff melt w/ bucks & cashback</th>
         <th class="sorttable_numeric">% diff melt w/ bucks & cashback</th>
         <th class="sorttable_numeric">Bucks/ozt</th>
@@ -55,7 +60,7 @@ sorttable.makeSortable(table);
         <td class="melt_diff_cash"></td>
         <td class="perc_diff_cash"></td>
         <td class="bucks_per"></td>
-        <td class="text-center"><span class="glyphicon {% if item.available %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></td>
+        <td class="text-center" sorttable_customkey="{% if item.available %}1{% else %}0{% endif %}"><span class="glyphicon {% if item.available %}glyphicon-ok{% else %}glyphicon-remove{% endif %}" aria-hidden="true"></span></td>
     </tr>
     {% endfor %}
     </tbody>
