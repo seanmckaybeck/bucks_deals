@@ -23,17 +23,22 @@ class Item(db.Model):
     reported = db.Column(db.Boolean, default=False)
     available = db.Column(db.Boolean, default=True)
     quantity = db.Column(db.Integer, default=0)
+    seller = db.Column(db.String)
 
-    def __init__(self, ebay_id=0, name='', price=0, weight=0, metal='', reported=False, available=True, picture_url='', quantity=0):
-        self.ebay_id = ebay_id
-        self.name = name
-        self.price = price
-        self.weight = weight
-        self.metal = metal
-        self.picture_url = picture_url
-        self.reported = reported
-        self.available = available
-        self.quantity = quantity
+    def to_json(self):
+        j = {
+             'ebay_id': self.ebay_id,
+             'name': self.name,
+             'price': self.price,
+             'weight': self.weight,
+             'metal': self.metal,
+             'picture_url': self.picture_url,
+             'reported': self.reported,
+             'available': self.available,
+             'quantity': self.quantity,
+             'seller': self.seller
+            }
+        return j
 
     def __repr__(self):
         return 'Item(%d, %s, %f, %f, %s, ...)' % (self.ebay_id, self.name, self.price, self.weight, self.metal)

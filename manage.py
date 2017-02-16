@@ -39,7 +39,8 @@ def add(ebay_id, name, price, weight, metal):
     weight = float(weight)
     item = Item.query.filter_by(ebay_id=ebay_id).first()
     if item is None:
-        item = Item(ebay_id, name, price, weight, metal)
+        item = Item(**{'ebay_id': ebay_id,'name': name,
+                       'price': price, 'weight': weight, 'metal': metal})
         db.session.add(item)
         db.session.commit()
 
@@ -94,22 +95,8 @@ def update_items():
         quantity = int(r.dict()['Item']['Quantity']) - int(r.dict()['Item']['QuantitySold'])
         item.quantity = quantity
         item.available = True if quantity > 0 else False
-        db.session.add(item)
-    db.session.commit()
-
-
-@manager.command
-def pictures():
-    """Set the picture_url for all items in the database"""
-    items = Item.query.all()
-    api = Connection(appid=app.config['EBAY_APP_ID'], config_file=None)
-    for item in items:
-        try:
-            r = api.execute('GetSingleItem', {'ItemID': str(item.ebay_id), 'IncludeSelector': 'Details'})
-        except:
-            print('call failed for {}'.format(item.ebay_id))
-            continue
         item.picture_url = r.dict()['Item']['PictureURL'][0]
+        item.seller = r.dict()['Item']['Seller']['UserID']
         db.session.add(item)
     db.session.commit()
 
@@ -140,17 +127,7 @@ def exportdb():
     uns = UnapprovedItem.query.all()
     data = defaultdict(list)
     for item in items:
-        i = {}
-        i['name'] = item.name
-        i['ebay_id'] = item.ebay_id
-        i['price'] = item.price
-        i['weight'] = item.weight
-        i['metal'] = item.metal
-        i['reported'] = item.reported
-        i['picture_url'] = item.picture_url
-        i['available'] = item.available
-        i['quantity'] = item.quantity
-        data['items'].append(i)
+        data['items'].append(item.to_json())
     for spot in spots:
         s = {}
         s['name'] = spot.name
@@ -170,9 +147,7 @@ def importdb():
     with open('data.json') as f:
         data = json.load(f)
     for item in data['items']:
-        i = Item(item['ebay_id'], item['name'], item['price'],
-                 item['weight'], item['metal'], item['reported'],
-                 item['available'], item['picture_url'], item['quantity'])
+        i = Item(**item)
         db.session.add(i)
     for spot in data['spots']:
         s = Spot(spot['name'], spot['value'])
