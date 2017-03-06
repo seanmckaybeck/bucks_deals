@@ -102,8 +102,8 @@ def update_items():
 
 
 @manager.command
-def picture(ebay_id):
-    """Set the picture_url for the specified item"""
+def update_item(ebay_id):
+    """Update the info for the specified item"""
     api = Connection(appid=app.config['EBAY_APP_ID'], config_file=None)
     item = Item.query.filter_by(ebay_id=ebay_id).first()
     if item:
@@ -112,7 +112,12 @@ def picture(ebay_id):
         except:
             print('call failed for {}'.format(item.ebay_id))
             return
+        item.price = float(r.dict()['Item']['ConvertedCurrentPrice']['value'])
+        quantity = int(r.dict()['Item']['Quantity']) - int(r.dict()['Item']['QuantitySold'])
+        item.quantity = quantity
+        item.available = True if quantity > 0 else False
         item.picture_url = r.dict()['Item']['PictureURL'][0]
+        item.seller = r.dict()['Item']['Seller']['UserID']
         db.session.add(item)
         db.session.commit()
     else:
