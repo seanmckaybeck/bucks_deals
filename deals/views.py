@@ -69,7 +69,8 @@ def submit():
     form = ItemForm()
     if form.validate_on_submit():
         u = UnapprovedItem.query.filter_by(ebay_id=form.item.data).first()
-        if not u:
+        i = Item.query.filter_by(ebay_id=form.item.data).first()
+        if not u and not i:
             u = UnapprovedItem(form.item.data)
             db.session.add(u)
             db.session.commit()
