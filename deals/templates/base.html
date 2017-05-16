@@ -38,6 +38,9 @@
 <body>
 {% block content %}
 <div class="container">
+    {% include "ad.html" %}
+</div>
+<div class="container">
 {{ utils.flashed_messages(dismissible=true) }}
 {% block page_content %}
 {% endblock %}

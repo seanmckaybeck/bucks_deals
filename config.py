@@ -16,4 +16,6 @@ MAILGUN_ADMIN = 'seanmckaybeck@gmail.com'
 MAILGUN_FROM = 'Mailgun <mailgun@{}>'.format(MAILGUN_DOMAIN)
 EBAY_APP_ID = ''
 ADMIN_CREDS = ('', '')
+RECAPTCHA_PUBLIC_KEY = ''
+RECAPTCHA_PRIVATE_KEY = ''
 

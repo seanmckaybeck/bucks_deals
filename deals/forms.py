@@ -1,4 +1,4 @@
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, RecaptchaField
 from wtforms.fields import IntegerField, SubmitField, SelectField
 from wtforms.validators import DataRequired
 
@@ -9,6 +9,7 @@ class ContactForm(FlaskForm):
 
 class ItemForm(FlaskForm):
     item = IntegerField('Item number', validators=[DataRequired()])
+    recaptcha = RecaptchaField()
     submit = SubmitField('Submit')
 
 
