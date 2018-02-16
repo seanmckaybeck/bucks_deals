@@ -91,13 +91,17 @@ def update_items():
         except:
             print('call failed for {}'.format(item.ebay_id))
             continue
-        item.price = float(r.dict()['Item']['ConvertedCurrentPrice']['value'])
-        quantity = int(r.dict()['Item']['Quantity']) - int(r.dict()['Item']['QuantitySold'])
-        item.quantity = quantity
-        item.available = True if quantity > 0 else False
-        item.picture_url = r.dict()['Item']['PictureURL'][0]
-        item.seller = r.dict()['Item']['Seller']['UserID']
-        db.session.add(item)
+        d = r.dict()
+        if d['Item']['ListingStatus'] == 'Completed':
+            db.session.delete(item)
+        else:
+            item.price = float(d['Item']['ConvertedCurrentPrice']['value'])
+            quantity = int(d['Item']['Quantity']) - int(r.dict()['Item']['QuantitySold'])
+            item.quantity = quantity
+            item.available = True if quantity > 0 else False
+            item.picture_url = d['Item']['PictureURL'][0]
+            item.seller = d['Item']['Seller']['UserID']
+            db.session.add(item)
     db.session.commit()
 
 
