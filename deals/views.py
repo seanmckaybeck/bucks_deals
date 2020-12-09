@@ -18,8 +18,10 @@ UNAPPROVED_DB = db.Base("unapproved")
 @deals_blueprint.route('/')
 def index(page=1):
     select = PercentForm()
-    spots = list(Spot(**s) for s in SPOT_DB.fetch())
-    items = list(Item(**i) for i in ITEM_DB.fetch())
+    sp = next(SPOT_DB.fetch())
+    it = next(ITEM_DB.fetch())
+    spots = list(Spot(**s) for s in sp)
+    items = list(Item(**i) for i in it)
     return flask.render_template('index.html', items=items, spots=spots, select=select)
 
 
@@ -35,11 +37,11 @@ def contact():
 
 @deals_blueprint.route('/item/<item_id>', methods=['GET', 'POST'])
 def item(item_id):
-    i = ITEM_DB.fetch(query={"key": item_id})
-    if not i:
+    i = ITEM_DB.get(item_id)
+    if i is None:
         flask.abort(404)
-    i = Item(**i[0])
-    spot = Spot(**SPOT_DB.fetch(query={"name": i.metal})[0])
+    i = Item(**i)
+    spot = Spot(**next(SPOT_DB.fetch(query={"name": i.metal}))[0])
     if flask.request.method == 'POST':
         if i.reported:
             flask.flash('This item has already been reported', 'warning')
@@ -54,7 +56,7 @@ def item(item_id):
                              }
             mailgun_notify(**mailgun_params)
             i.reported = True
-            ITEM_DB.update(i.dict(), i.key)
+            ITEM_DB.put(i.dict())
             flask.flash("Thanks for the report! We'll look into it.", 'success')
     return flask.render_template('item.html', item=i, spot=spot)
 
@@ -63,8 +65,8 @@ def item(item_id):
 def submit():
     form = ItemForm()
     if form.validate_on_submit():
-        u = UNAPPROVED_DB.fetch({"ebay_id": form.item.data})  # list of 1 or 0
-        i = ITEM_DB.fetch({"ebay_id": form.item.data})
+        u = next(UNAPPROVED_DB.fetch({"ebay_id": form.item.data}))  # list of 1 or 0
+        i = next(ITEM_DB.fetch({"ebay_id": form.item.data}))
         if not u and not i:
             UNAPPROVED_DB.put({"ebay_id": form.item.data})
             flask.flash('Item submitted for approval. Thank you.', 'success')
