@@ -40,4 +40,3 @@ def mailgun_notify(**kwargs):
     )
     if req.status_code != 200:
         raise Exception('Request was not successful. Status code: {}'.format(req.status_code))
-
